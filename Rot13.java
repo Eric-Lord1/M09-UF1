@@ -91,13 +91,14 @@ public class Rot13 {
         
         Scanner sc = new Scanner(System.in);
 
-        var x = sc.nextLine();
+        var userInput = sc.nextLine();
+        var inputEncoded = xifraRot13(userInput);
+        var inputDecoded = desxifraRot13(inputEncoded);
 
-        var y = xifraRot13(x);
+        System.out.println("Input Encoded: " + inputEncoded);
+        System.out.println("Input Decoded: " + inputDecoded);
 
-        System.out.println(y);
-        System.out.println(desxifraRot13(y));
-
+        sc.close();
 
     }
 
