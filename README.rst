@@ -11,11 +11,15 @@ Lista de elementos:
 ===================
 
 - Primer elemento
+
   - Subelemento 1
   - Subelemento 2
+
 - Segundo elemento
+
   - Subelemento 1
   - Subelemento 2
+
 - Tercer elemento
 
 Ejemplo de código:
