@@ -1,5 +1,4 @@
 /*
- * Enunciat
 
 Crea una classe Java anomenada Rot13.java que contingui les següents funcions:
 
@@ -8,17 +7,7 @@ que està 13 posicions més a la dreta en l’abecedari (si sobrepassa ha de tor
 
 desxifraRot13( cadena ): Ha de fer el procés invers de la funció anterior.
 
-Crea també un main per fer algunes proves.
-
-Recomanacions
-
-Crea un 2 array a nivell de classe
-    Un amb les lletres de l’abecedari minúscules en ordre i
-    Un altre amb les lletres en majúscula en ordre alfabètic
-Feu-ho per simplificar el procés de desplaçament d’una lletra per un altra.
- */
-
-import java.util.Scanner;
+*/
 
 public class Rot13 {
 
@@ -89,17 +78,20 @@ public class Rot13 {
     
     public static void main(String[] args) {
         
-        Scanner sc = new Scanner(System.in);
+        String[] userInput = {"Hola k tal :)","xd","L'altrè dià vàig veuré ún GOSET !!!!"};
 
-        var userInput = sc.nextLine();
-        var inputEncoded = xifraRot13(userInput);
-        var inputDecoded = desxifraRot13(inputEncoded);
+        for (int i = 0; i < userInput.length; i++) {
+            
+            var inputEncoded = xifraRot13(userInput[i]);
+            var inputDecoded = desxifraRot13(inputEncoded);
 
-        System.out.println("Input Encoded: " + inputEncoded);
-        System.out.println("Input Decoded: " + inputDecoded);
+            System.out.println("Input Encoded: " + inputEncoded);
+            System.out.println("Input Decoded: " + inputDecoded);
+            System.out.println();
 
-        sc.close();
+        }
 
+        
     }
 
 }
