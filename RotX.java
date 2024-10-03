@@ -79,6 +79,15 @@ public class RotX {
         return decodedString.toString();
     }
 
+    public static void forcaBruta(String xifratInput) {
+
+        for (int i = 0; i < ABC.length; i++) {
+            String x = desxifraRotX(xifratInput, i);
+            System.out.println(x);
+        }
+
+    }
+
     
     public static void main(String[] args) {
         
@@ -93,6 +102,7 @@ public class RotX {
             System.out.println("Input Encoded: " + inputEncoded);
             System.out.println("Input Decoded: " + inputDecoded);
             System.out.println();
+            forcaBruta(inputEncoded);
 
         }
 
