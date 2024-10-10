@@ -1,5 +1,4 @@
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -7,9 +6,9 @@ import java.util.Random;
 
 public class Polialfabetic {
 
-    private static final char[] ABC = "AÁÀBCÇDEÉÈFGHIÍÌJKLMNÑOÓÒPQRSTUÚÙVWXYZ".toCharArray();
-
-    private static final int password = 7344592;
+    private static final char[] ABC = "AÁÀÄBCÇDEÉÈËFGHIÍÌÏJKLMNÑOÓÒÖPQRSTUÚÙÜVWXYZ".toCharArray();
+    private static ArrayList<Character> permutedAlphabet;
+    private static final int PASSWORD = 7344592;
 
     private static Random random;
 
@@ -17,13 +16,25 @@ public class Polialfabetic {
         random = new Random(key);
     }
 
-    private static char mapLetter(String permutedAlphabet, char letter) {
+    public static void permutaAlfabet() {
+
+        permutedAlphabet = new ArrayList<Character>();
+
+        for (char c : ABC) {
+            permutedAlphabet.add(c);
+        }
+
+        Collections.shuffle(permutedAlphabet,random);
+
+    }
+
+    private static char mapLetter(char letter) {
 
         int position = 0;
 
         ArrayList<Character> permutedABC = new ArrayList<Character>();
 
-        for (char c : permutedAlphabet.toCharArray()) {
+        for (char c : permutedAlphabet.toString().toCharArray()) {
             if(Character.isAlphabetic(c)) {
                 permutedABC.add(c);
             }
@@ -39,13 +50,13 @@ public class Polialfabetic {
         return permutedABC.get(position);
     }
 
-    private static char mapEncriptedLetter(String permutedAlphabet, char letter) {
+    private static char mapEncriptedLetter(char letter) {
 
         int position = 0;
 
         ArrayList<Character> permutedABC = new ArrayList<Character>();
 
-        for (char c : permutedAlphabet.toCharArray()) {
+        for (char c : permutedAlphabet.toString().toCharArray()) {
             if(Character.isAlphabetic(c)) {
                 permutedABC.add(c);
             }
@@ -66,28 +77,23 @@ public class Polialfabetic {
     private static String xifraPoliAlfa(String userLine) {
 
         StringBuilder encriptedLine = new StringBuilder();
-        ArrayList<Character> permutedAlphabet = new ArrayList<Character>();
-
-        for (char c : ABC) {
-            permutedAlphabet.add(c);
-        }
 
         for (char letter : userLine.toCharArray()) {
-            
-            Collections.shuffle(permutedAlphabet,random);
 
+            permutaAlfabet();
+            
             if(!Character.isAlphabetic(letter)) {
                 encriptedLine.append(letter);
                 continue;
             }
 
             if(Character.isLowerCase(letter)) {
-                letter = mapLetter(permutedAlphabet.toString(), Character.toUpperCase(letter));
+                letter = mapLetter(Character.toUpperCase(letter));
                 encriptedLine.append(Character.toLowerCase(letter));
                 continue;
             }
 
-            letter = mapLetter(permutedAlphabet.toString(), Character.toUpperCase(letter));
+            letter = mapLetter(Character.toUpperCase(letter));
             encriptedLine.append(letter);
             
         }
@@ -99,7 +105,6 @@ public class Polialfabetic {
     private static String desxifraPoliAlfa(String userLine) {
         
         StringBuilder desencriptedLine = new StringBuilder();
-        ArrayList<Character> permutedAlphabet = new ArrayList<Character>();
 
         for (char c : ABC) {
             permutedAlphabet.add(c);
@@ -107,7 +112,7 @@ public class Polialfabetic {
 
         for (char letter : userLine.toCharArray()) {
             
-            Collections.shuffle(permutedAlphabet,random);
+            permutaAlfabet();
 
             if(!Character.isAlphabetic(letter)) {
                 desencriptedLine.append(letter);
@@ -115,12 +120,12 @@ public class Polialfabetic {
             }
 
             if(Character.isLowerCase(letter)) {
-                letter = mapEncriptedLetter(permutedAlphabet.toString(), Character.toUpperCase(letter));
+                letter = mapEncriptedLetter(Character.toUpperCase(letter));
                 desencriptedLine.append(Character.toLowerCase(letter));
                 continue;
             }
 
-                letter = mapEncriptedLetter(permutedAlphabet.toString(), Character.toUpperCase(letter));
+                letter = mapEncriptedLetter(Character.toUpperCase(letter));
                 desencriptedLine.append(letter);
             
         }
@@ -140,7 +145,7 @@ public class Polialfabetic {
         System.out.println("Xifratge:\n--------");
 
         for (int i = 0; i < msgs.length; i++) {
-            initRandom(password);
+            initRandom(PASSWORD);
             msgsXifrats[i] = xifraPoliAlfa(msgs[i]);
             System.out.printf("%-34s -> %s%n", msgs[i], msgsXifrats[i]);
         }
@@ -148,7 +153,7 @@ public class Polialfabetic {
         System.out.println("Desxifratge:\n-----------");
 
         for (int i = 0; i < msgs.length; i++) {
-            initRandom(password);
+            initRandom(PASSWORD);
             String msg = desxifraPoliAlfa(msgsXifrats[i]);
             System.out.printf("%-34s -> %s%n", msgsXifrats[i], msg);
         }
