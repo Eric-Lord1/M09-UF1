@@ -12,6 +12,7 @@ mitjançant el xifrat estàndard AES
 utilitzant les llibreries de Java 
 (javax.crypto.* java.security.*) 
  */
+
 public class AES {
 
     public static final String ALGORISME_XIFRAT = "AES";
@@ -56,29 +57,29 @@ public class AES {
     public static String desxifraAES(byte[] bIvIMsgXifrat, String clau) throws Exception {
 
         // Extreure l'IV.
-        // Extreure la part xifrada.
-        // Fer hash de la clau
-        // Desxifrar.
-        // return String desxifrat
-
         String encrypted = Base64.getEncoder().encodeToString(bIvIMsgXifrat);
         byte[] encryptedIvTextBytes = Base64.getDecoder().decode(encrypted);
 
+        // Extreure la part xifrada.        
         System.arraycopy(encryptedIvTextBytes, 0, iv, 0, iv.length);
         IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
         int encryptedSize = encryptedIvTextBytes.length - MIDA_IV;
         byte[] encryptedBytes = new byte[encryptedSize];
         System.arraycopy(encryptedIvTextBytes, MIDA_IV, encryptedBytes, 0, encryptedSize);
-
+        
+        // Fer hash de la clau
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         digest.update(CLAU.getBytes("UTF-8"));
         byte[] keyBytes = new byte[MIDA_IV];
         System.arraycopy(digest.digest(), 0, keyBytes, 0, keyBytes.length);
         SecretKeySpec secretKeySpec = new SecretKeySpec(keyBytes, ALGORISME_XIFRAT);
-
+    
+        // Desxifrar.
         Cipher cipherDecrypt = Cipher.getInstance(FORMAT_AES);
         cipherDecrypt.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec);
         byte[] decrypted = cipherDecrypt.doFinal(encryptedBytes);
+
+        // return String desxifrat    
         return new String(decrypted);
 
     }
