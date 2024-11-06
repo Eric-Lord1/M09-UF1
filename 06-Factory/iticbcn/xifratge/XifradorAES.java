@@ -7,7 +7,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class XifradorAES {
+public class XifradorAES implements Xifrador{
 
     public static final String ALGORISME_XIFRAT = "AES";
     public static final String ALGORISME_HASH = "SHA-256";
@@ -76,6 +76,31 @@ public class XifradorAES {
         // return String desxifrat    
         return new String(decrypted);
 
+    }
+
+    @Override
+    public TextXifrat xifra(String msg, String clau) throws ClauNoSuportada {
+        if (clau == null) {
+            throw new ClauNoSuportada("Xifratxe AES no suporta clau != null");
+        }
+        try {
+            byte[] encryptedData = xifraAES(msg, clau);
+            return new TextXifrat(encryptedData);
+        } catch (Exception e) {
+            throw new RuntimeException("Error en el procés de xifrat", e);
+        }
+    }
+
+    @Override
+    public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
+        if (clau == null) {
+            throw new ClauNoSuportada("Xifratxe AES no suporta clau != null");
+        }
+        try {
+            return desxifraAES(xifrat.getBytes(), clau);
+        } catch (Exception e) {
+            throw new RuntimeException("Error en el procés de desxifrat", e);
+        }
     }
 
     

@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-
-public class XifradorPolialfabetic {
+public class XifradorPolialfabetic implements Xifrador {
 
     private static final char[] ABC = "AÁÀÄBCÇDEÉÈËFGHIÍÌÏJKLMNÑOÓÒÖPQRSTUÚÙÜVWXYZ".toCharArray();
     private static ArrayList<Character> permutedAlphabet;
@@ -24,8 +23,12 @@ public class XifradorPolialfabetic {
             permutedAlphabet.add(c);
         }
 
-        Collections.shuffle(permutedAlphabet,random);
+        Collections.shuffle(permutedAlphabet, random);
 
+    }
+
+    private void initRandom(long key) {
+        this.random = new Random(key);
     }
 
     private char mapLetter(char letter) {
@@ -35,13 +38,13 @@ public class XifradorPolialfabetic {
         ArrayList<Character> permutedABC = new ArrayList<Character>();
 
         for (char c : permutedAlphabet.toString().toCharArray()) {
-            if(Character.isAlphabetic(c)) {
+            if (Character.isAlphabetic(c)) {
                 permutedABC.add(c);
             }
         }
 
         for (int i = 0; i < ABC.length; i++) {
-            if(ABC[i] == letter) {
+            if (ABC[i] == letter) {
                 position = i;
                 break;
             }
@@ -57,14 +60,14 @@ public class XifradorPolialfabetic {
         ArrayList<Character> permutedABC = new ArrayList<Character>();
 
         for (char c : permutedAlphabet.toString().toCharArray()) {
-            if(Character.isAlphabetic(c)) {
+            if (Character.isAlphabetic(c)) {
                 permutedABC.add(c);
             }
         }
 
         for (int i = 0; i < ABC.length; i++) {
-            
-            if(permutedABC.get(i) == letter) {
+
+            if (permutedABC.get(i) == letter) {
                 position = i;
                 break;
             }
@@ -81,13 +84,13 @@ public class XifradorPolialfabetic {
         for (char letter : userLine.toCharArray()) {
 
             permutaAlfabet();
-            
-            if(!Character.isAlphabetic(letter)) {
+
+            if (!Character.isAlphabetic(letter)) {
                 encriptedLine.append(letter);
                 continue;
             }
 
-            if(Character.isLowerCase(letter)) {
+            if (Character.isLowerCase(letter)) {
                 letter = mapLetter(Character.toUpperCase(letter));
                 encriptedLine.append(Character.toLowerCase(letter));
                 continue;
@@ -95,7 +98,7 @@ public class XifradorPolialfabetic {
 
             letter = mapLetter(Character.toUpperCase(letter));
             encriptedLine.append(letter);
-            
+
         }
 
         return encriptedLine.toString();
@@ -103,7 +106,7 @@ public class XifradorPolialfabetic {
     }
 
     private String desxifraPoliAlfa(String userLine) {
-        
+
         StringBuilder desencriptedLine = new StringBuilder();
 
         for (char c : ABC) {
@@ -111,27 +114,57 @@ public class XifradorPolialfabetic {
         }
 
         for (char letter : userLine.toCharArray()) {
-            
+
             permutaAlfabet();
 
-            if(!Character.isAlphabetic(letter)) {
+            if (!Character.isAlphabetic(letter)) {
                 desencriptedLine.append(letter);
                 continue;
             }
 
-            if(Character.isLowerCase(letter)) {
+            if (Character.isLowerCase(letter)) {
                 letter = mapEncriptedLetter(Character.toUpperCase(letter));
                 desencriptedLine.append(Character.toLowerCase(letter));
                 continue;
             }
 
-                letter = mapEncriptedLetter(Character.toUpperCase(letter));
-                desencriptedLine.append(letter);
-            
+            letter = mapEncriptedLetter(Character.toUpperCase(letter));
+            desencriptedLine.append(letter);
+
         }
 
         return desencriptedLine.toString();
-        
+
+    }
+
+    @Override
+    public TextXifrat xifra(String msg, String clau) throws ClauNoSuportada {
+        long key;
+        try {
+            key = Long.parseLong(clau);
+            initRandom(key);
+            permutaAlfabet();
+        } catch (NumberFormatException e) {
+            throw new ClauNoSuportada("Xifratxe polialfabètic no suporta clau != null");
+        }
+
+        String encriptedText = xifraPoliAlfa(msg);
+        return new TextXifrat(encriptedText.getBytes());
+    }
+
+    @Override
+    public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
+        long key;
+        try {
+            key = Long.parseLong(clau);
+            initRandom(key);
+            permutaAlfabet();
+        } catch (NumberFormatException e) {
+            throw new ClauNoSuportada("Xifratxe polialfabètic no suporta clau != null");
+        }
+
+        String decryptedText = desxifraPoliAlfa(new String(xifrat.getBytes()));
+        return decryptedText;
     }
 
 }

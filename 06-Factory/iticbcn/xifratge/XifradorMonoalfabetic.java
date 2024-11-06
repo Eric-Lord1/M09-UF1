@@ -4,13 +4,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 
-public class XifradorMonoalfabetic {
+public class XifradorMonoalfabetic implements Xifrador {
 
     private static final char ABC[] = {'A', 'À', 'Á', 'B', 'C', 'Ç', 'D', 'E', 'È' , 'É' , 'F' , 'G', 'H', 'I', 'Í' , 'J', 'K', 'L', 'M', 'N', 'O', 'Ò', 'Ó' ,'P', 'Q', 'R', 'S', 'T', 'U', 'Ú', 'V' , 'W', 'X', 'Y', 'Z'};
     private static char PABC[]; 
     private static LinkedHashMap<Character, Character> mapKV;
     private static LinkedHashMap<Character, Character> mapVK;
 
+    public XifradorMonoalfabetic() {
+        this.PABC = permutaAlfabet();
+        this.mapKV = createMapKV();
+        this.mapVK = createMapVK();
+    }
 
     private LinkedHashMap<Character, Character> createMapKV() {
 
@@ -99,6 +104,26 @@ public class XifradorMonoalfabetic {
 
         return inputDesxifrat;
 
+    }
+
+    @Override
+    public TextXifrat xifra(String msg, String clau) throws ClauNoSuportada {
+        if (clau != null) {
+            throw new ClauNoSuportada("Xifratxe monoalfabètic no suporta clau != null");
+        }
+        
+        StringBuilder textXifrat = xifraMonoAlfa(msg);
+        return new TextXifrat(textXifrat.toString().getBytes());
+    }
+
+    @Override
+    public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
+        if (clau != null) {
+            throw new ClauNoSuportada("Xifratxe monoalfabètic no suporta clau != null");
+        }
+        
+        StringBuilder textDesxifrat = desxifraMonoAlfa(new String(xifrat.getBytes()));
+        return textDesxifrat.toString();
     }
 
 }
