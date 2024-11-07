@@ -4,7 +4,6 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.spec.RSAKeyGenParameterSpec;
 
 import javax.crypto.Cipher;
 
@@ -16,7 +15,7 @@ public class ClauPublica {
         KeyPairGenerator generadorClaus = KeyPairGenerator.getInstance("RSA");
         
         // Inicialitzem el generador de claus amb una mida de 2048 bits i un exponent f4
-        generadorClaus.initialize(new RSAKeyGenParameterSpec(2048, RSAKeyGenParameterSpec.F4));
+        generadorClaus.initialize(2048);
 
         // Retornem el parell de claus la publica i la privada
         return generadorClaus.generateKeyPair();
