@@ -7,7 +7,7 @@ import javax.crypto.spec.PBEKeySpec;
 
 public class Hashes {
 
-    private static int count = 0;
+    private int npass;
 
     public String getSHA512AmbSalt(String pw, String salt) {
 
@@ -43,7 +43,8 @@ public class Hashes {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        System.out.println(count++);
+
+        npass++;
         return passwordEncripted;
 
     }
@@ -74,6 +75,7 @@ public class Hashes {
             }
 
             // Retornar el hash como un String hexadecimal
+            npass++;
             return sb.toString();
 
         } catch (Exception e) {
@@ -81,62 +83,117 @@ public class Hashes {
         }
     }
 
+    public String getInterval(long t1, long t2) {
+
+        return String.valueOf(t2 - t1);
+
+    }
+
     public String forcaBruta(String alg, String hash, String salt) {
+
+        npass = 0;
 
         char[] charSet = "abcdefABCDEF1234567890!".toCharArray();
 
         char[] hackPasw = new char[6];
 
-        if (alg.equals("SHA-512")) 
+        if (alg.equals("SHA-512")) {
 
-        for (int i = 0; i < 23; i++) {
-            hackPasw[0] = charSet[i];
-            if (getSHA512AmbSalt(String.copyValueOf(hackPasw), salt).equals(hash))
-                return String.copyValueOf(hackPasw);
-            for (int j = 0; j < 23; j++) {
-                hackPasw[1] = charSet[j];
+            for (int i = 0; i < 23; i++) {
+                hackPasw[0] = charSet[i];
                 if (getSHA512AmbSalt(String.copyValueOf(hackPasw), salt).equals(hash))
                     return String.copyValueOf(hackPasw);
-                for (int k = 0; k < 23; k++) {
-                    hackPasw[2] = charSet[k];
+                for (int j = 0; j < 23; j++) {
+                    hackPasw[1] = charSet[j];
                     if (getSHA512AmbSalt(String.copyValueOf(hackPasw), salt).equals(hash))
                         return String.copyValueOf(hackPasw);
-                    for (int m = 0; m < 23; m++) {
-                        hackPasw[3] = charSet[m];
+                    for (int k = 0; k < 23; k++) {
+                        hackPasw[2] = charSet[k];
                         if (getSHA512AmbSalt(String.copyValueOf(hackPasw), salt).equals(hash))
                             return String.copyValueOf(hackPasw);
-                        for (int n = 0; n < 23; n++) {
-                            hackPasw[4] = charSet[n];
+                        for (int m = 0; m < 23; m++) {
+                            hackPasw[3] = charSet[m];
                             if (getSHA512AmbSalt(String.copyValueOf(hackPasw), salt).equals(hash))
                                 return String.copyValueOf(hackPasw);
-                            for (int o = 0; o < 23; o++) {
-                                hackPasw[5] = charSet[o];
+                            for (int n = 0; n < 23; n++) {
+                                hackPasw[4] = charSet[n];
                                 if (getSHA512AmbSalt(String.copyValueOf(hackPasw), salt).equals(hash))
                                     return String.copyValueOf(hackPasw);
-                                hackPasw[5] = ' ';
+                                for (int o = 0; o < 23; o++) {
+                                    hackPasw[5] = charSet[o];
+                                    if (getSHA512AmbSalt(String.copyValueOf(hackPasw), salt).equals(hash))
+                                        return String.copyValueOf(hackPasw);
+                                    hackPasw[5] = ' ';
+                                }
+                                hackPasw[4] = ' ';
                             }
-                            hackPasw[4] = ' ';
+                            hackPasw[3] = ' ';
                         }
-                        hackPasw[3] = ' ';
+                        hackPasw[2] = ' ';
                     }
-                    hackPasw[2] = ' ';
+                    hackPasw[1] = ' ';
                 }
-                hackPasw[1] = ' ';
             }
+
+        } else if (alg.equals("PBKDF2")) {
+
+            for (int i = 0; i < 23; i++) {
+                hackPasw[0] = charSet[i];
+                if (getPBKDF2AmbSalt(String.copyValueOf(hackPasw), salt).equals(hash))
+                    return String.copyValueOf(hackPasw);
+                for (int j = 0; j < 23; j++) {
+                    hackPasw[1] = charSet[j];
+                    if (getPBKDF2AmbSalt(String.copyValueOf(hackPasw), salt).equals(hash))
+                        return String.copyValueOf(hackPasw);
+                    for (int k = 0; k < 23; k++) {
+                        hackPasw[2] = charSet[k];
+                        if (getPBKDF2AmbSalt(String.copyValueOf(hackPasw), salt).equals(hash))
+                            return String.copyValueOf(hackPasw);
+                        for (int m = 0; m < 23; m++) {
+                            hackPasw[3] = charSet[m];
+                            if (getPBKDF2AmbSalt(String.copyValueOf(hackPasw), salt).equals(hash))
+                                return String.copyValueOf(hackPasw);
+                            for (int n = 0; n < 23; n++) {
+                                hackPasw[4] = charSet[n];
+                                if (getPBKDF2AmbSalt(String.copyValueOf(hackPasw), salt).equals(hash))
+                                    return String.copyValueOf(hackPasw);
+                                for (int o = 0; o < 23; o++) {
+                                    hackPasw[5] = charSet[o];
+                                    if (getPBKDF2AmbSalt(String.copyValueOf(hackPasw), salt).equals(hash))
+                                        return String.copyValueOf(hackPasw);
+                                    hackPasw[5] = ' ';
+                                }
+                                hackPasw[4] = ' ';
+                            }
+                            hackPasw[3] = ' ';
+                        }
+                        hackPasw[2] = ' ';
+                    }
+                    hackPasw[1] = ' ';
+                }
+            }
+
+        } else {
+            return "Algoritme no implementat";
         }
+
+        
 
         return "Password no trobat";
 
     }
 
     public static void main(String[] args) throws Exception {
+
         String salt = "qpoweiruañslkdfjz";
         String pw = "aaabF!";
         Hashes h = new Hashes();
-        String[] aHashes = { h.getSHA512AmbSalt(pw, salt),
-                h.getPBKDF2AmbSalt(pw, salt) };
+
+        String[] aHashes = { h.getSHA512AmbSalt(pw, salt), h.getPBKDF2AmbSalt(pw, salt) };
+
         String pwTrobat = null;
         String[] algorismes = { "SHA-512", "PBKDF2" };
+
         for (int i = 0; i < aHashes.length; i++) {
             System.out.printf("===========================\n");
             System.out.printf("Algorisme: %s\n", algorismes[i]);
