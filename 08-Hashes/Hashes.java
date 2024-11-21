@@ -57,7 +57,7 @@ public class Hashes {
             byte[] saltBytes = salt.getBytes("UTF-8");
 
             // Nombre de iteracions (més iteracions => més segur)
-            int iterations = 10000;
+            int iterations = 65536;
 
             // Longitud del hash resultant
             int keyLength = 512; // En bits
